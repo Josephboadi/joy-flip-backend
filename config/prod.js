@@ -2,5 +2,5 @@ module.exports = {
   MONGOURI: process.env.MONGOURI,
   JWT_SECRETE: process.env.JWT_SEC,
   SENDGRID_API: process.env.SENDGRID_API,
-  EMAIL: process.env.EMAIL,
+  // EMAIL: process.env.EMAIL,
 };

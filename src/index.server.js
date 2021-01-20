@@ -48,6 +48,14 @@ app.use("/api", addressRoutes);
 app.use("/api", orderRoutes);
 app.use("/api", adminOrderRoutes);
 
+// if (process.env.NODE_ENV == "production") {
+//   app.use(express.static("client/build"));
+//   const path = require("path");
+//   app.get("*", (req, res) => {
+//     res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
+//   });
+// }
+
 app.listen(process.env.PORT, () => {
   console.log(`Server is runningg on port ${process.env.PORT}`);
 });
