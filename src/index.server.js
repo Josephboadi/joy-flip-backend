@@ -1,13 +1,13 @@
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
-const { MONGOURI, PORT } = require("../config/keys");
+const { MONGOURI } = require("../config/keys");
 const env = require("dotenv");
 const path = require("path");
 const cors = require("cors");
 
 // routes
-const userRoutes = require("./routes/auth");
+const authRoutes = require("./routes/auth");
 const adminRoutes = require("./routes/admin/auth");
 const categoryRoutes = require("./routes/category");
 const productRoutes = require("./routes/product");
@@ -35,19 +35,9 @@ mongoose.connection.on("error", (err) => {
 });
 
 app.use(cors());
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*");
-  next();
-});
 app.use(express.json());
-app.use(cors());
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*");
-  next();
-});
 app.use("/public", express.static(path.join(__dirname, "uploads")));
-app.use("/api", userRoutes);
-
+app.use("/api", authRoutes);
 app.use("/api", adminRoutes);
 app.use("/api", categoryRoutes);
 app.use("/api", productRoutes);
@@ -58,14 +48,6 @@ app.use("/api", addressRoutes);
 app.use("/api", orderRoutes);
 app.use("/api", adminOrderRoutes);
 
-// if (process.env.NODE_ENV == "production") {
-//   app.use(express.static("client/build"));
-//   const path = require("path");
-//   app.get("*", (req, res) => {
-//     res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
-//   });
-// }
-
-app.listen(process.env.PORT || PORT, () => {
-  console.log(`Server is runningg on port ${process.env.PORT} || ${PORT}`);
+app.listen(process.env.PORT, () => {
+  console.log(`Server is runningg on port ${process.env.PORT} `);
 });
