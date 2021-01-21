@@ -1,6 +1,7 @@
 {
   "name": "backend",
   "version": "1.0.0",
+  "proxy": "https://joy-flip-admin.herokuapp.com/",
   "description": "This is backend of ecommerce app",
   "main": "index.js",
   "scripts": {
