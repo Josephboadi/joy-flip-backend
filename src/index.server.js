@@ -40,9 +40,14 @@ app.use((req, res, next) => {
   next();
 });
 app.use(express.json());
-
+app.use(cors());
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  next();
+});
 app.use("/public", express.static(path.join(__dirname, "uploads")));
 app.use("/api", userRoutes);
+
 app.use("/api", adminRoutes);
 app.use("/api", categoryRoutes);
 app.use("/api", productRoutes);
