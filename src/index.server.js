@@ -36,6 +36,10 @@ mongoose.connection.on("error", (err) => {
 
 app.use(cors());
 app.use(express.json());
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  next();
+});
 app.use("/public", express.static(path.join(__dirname, "uploads")));
 app.use("/api", userRoutes);
 app.use("/api", adminRoutes);
