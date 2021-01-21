@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
-const { MONGOURI } = require("../config/keys");
+const { MONGOURI, PORT } = require("../config/keys");
 const env = require("dotenv");
 const path = require("path");
 const cors = require("cors");
@@ -56,6 +56,6 @@ app.use("/api", adminOrderRoutes);
 //   });
 // }
 
-app.listen(process.env.PORT, () => {
-  console.log(`Server is runningg on port ${process.env.PORT}`);
+app.listen(process.env.PORT || PORT, () => {
+  console.log(`Server is runningg on port ${process.env.PORT} || ${PORT}`);
 });
