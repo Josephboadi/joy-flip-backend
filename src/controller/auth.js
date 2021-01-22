@@ -5,16 +5,16 @@ const bcrypt = require("bcrypt");
 const shortid = require("shortid");
 
 const generateJwtToken = (_id, role) => {
-  return jwt.sign({ _id, role }, JWT_SECRETE, {
+  return jwt.sign({ _id, role }, process.env.JWT_SECRET, {
     expiresIn: "1d",
   });
 };
 
-module.exports.signup = (req, res) => {
+exports.signup = (req, res) => {
   User.findOne({ email: req.body.email }).exec(async (error, user) => {
     if (user)
       return res.status(400).json({
-        message: "User already registered",
+        error: "User already registered",
       });
 
     const { firstName, lastName, email, password } = req.body;
@@ -24,8 +24,9 @@ module.exports.signup = (req, res) => {
       lastName,
       email,
       hash_password,
-      userName: shortid.generate(),
+      username: shortid.generate(),
     });
+
     _user.save((error, user) => {
       if (error) {
         return res.status(400).json({
@@ -35,7 +36,7 @@ module.exports.signup = (req, res) => {
 
       if (user) {
         const token = generateJwtToken(user._id, user.role);
-        const { _id, firstName, lastName, email, role, fullName } = use;
+        const { _id, firstName, lastName, email, role, fullName } = user;
         return res.status(201).json({
           token,
           user: { _id, firstName, lastName, email, role, fullName },
@@ -45,7 +46,7 @@ module.exports.signup = (req, res) => {
   });
 };
 
-module.exports.signin = (req, res) => {
+exports.signin = (req, res) => {
   User.findOne({ email: req.body.email }).exec(async (error, user) => {
     if (error) return res.status(400).json({ error });
     if (user) {
@@ -53,21 +54,18 @@ module.exports.signin = (req, res) => {
       if (isPassword && user.role === "user") {
         // const token = jwt.sign(
         //   { _id: user._id, role: user.role },
-        //   JWT_SECRETE,
-        //   {
-        //     expiresIn: "1d",
-        //   }
+        //   process.env.JWT_SECRET,
+        //   { expiresIn: "1d" }
         // );
-
         const token = generateJwtToken(user._id, user.role);
-        const { _id, firstName, lastName, email, role, fullName } = use;
-        return res.status(201).json({
+        const { _id, firstName, lastName, email, role, fullName } = user;
+        res.status(200).json({
           token,
           user: { _id, firstName, lastName, email, role, fullName },
         });
       } else {
         return res.status(400).json({
-          message: "Somthing went wrong",
+          message: "Something went wrong",
         });
       }
     } else {
